@@ -1,8 +1,0 @@
-﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v150\Microsoft.CppBuild.targets(377,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
-  main.cpp
-  options.cpp
-main.obj : warning LNK4197: export 'PLUGIN' specified multiple times; using first specification
-     Creating library C:\Program Files\IDA Professional 9.0\plugins\ida-rpc64.lib and object C:\Program Files\IDA Professional 9.0\plugins\ida-rpc64.exp
-  Generating code
-  Finished generating code
-  ida-rpc.vcxproj -> C:\Program Files\IDA Professional 9.0\plugins\ida-rpc64.dll
