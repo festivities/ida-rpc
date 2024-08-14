@@ -33,11 +33,12 @@ namespace callbacks
 			case processor_t::event_t::ev_oldfile:
 			case processor_t::event_t::ev_newfile:
 			case processor_t::event_t::ev_newbinary:
-			case processor_t::event_t::ev_rename:
+			//case processor_t::event_t::ev_rename:
 			{
-				//if ( g_Options.output_type >= ( int )output_type::errors_results_and_interim_steps && g_Options.output_enabled ) {
-				//	msg( "[%s] %s called with notification code %i\n", IDAP_name, __FUNCTION__, notification_code );
-				//}
+				/*if(g_options.output_type >= (int)output_type::errors_results_and_interim_steps && g_options.output_enabled) {
+					msg( "[%s] %s called with notification code %i\n", IDAP_name, __FUNCTION__, notification_code );
+				}*/
+				//msg("[%s] %s called with notification code %i\n", IDAP_name, __FUNCTION__, notification_code);
 				discord_utils::update_discord_presence( start_time );
 			}
 			break;
@@ -56,14 +57,12 @@ namespace callbacks
 			case idb_event::savebase:
 			case idb_event::func_updated:
 			case idb_event::set_func_start:
-			case idb_event::renamed:
+			//case idb_event::renamed:
 			case idb_event::func_added:
 			case idb_event::deleting_func:
 			case idb_event::allsegs_moved: // This event is sent when ida finishing rebasing a database
 			{
-				//if ( g_Options.output_type >= ( int )output_type::errors_results_and_interim_steps && g_Options.output_enabled ) {
-				//	msg( "[%s] %s called with notification code %i\n", IDAP_name, __FUNCTION__, notification_code );
-				//}
+				//msg("[%s] %s called with notification code %i\n", IDAP_name, __FUNCTION__, notification_code);
 				discord_utils::update_discord_presence( start_time );
 			}
 			break;
@@ -85,9 +84,6 @@ namespace callbacks
 			case ui_get_cursor:
 			case ui_get_curline:
 			{
-				//if( g_Options.output_type >= ( int )output_type::errors_results_and_interim_steps && g_Options.output_enabled ) {
-				//	msg( "[%s] %s called with notification code %i\n", IDAP_name, __FUNCTION__, notification_code );
-				//}
 				discord_utils::update_discord_presence( start_time );
 			}
 			break;
@@ -108,9 +104,7 @@ namespace callbacks
 			case view_click:
 			case view_curpos:
 			{
-				//if( g_Options.output_type >= ( int )output_type::errors_results_and_interim_steps && g_Options.output_enabled ) {
-				//	msg( "[%s] %s called with notification code %i\n", IDAP_name, __FUNCTION__, notification_code );
-				//}
+				msg("[%s] %s called with notification code %i\n", IDAP_name, __FUNCTION__, notification_code);
 				discord_utils::update_discord_presence( start_time );
 			}
 			break;
@@ -135,7 +129,7 @@ namespace callbacks
 	}
 }
 
-static int idaapi hook_callbacks( ) {
+static plugmod_t* idaapi hook_callbacks( ) {
 
 	// IDP callback hook ///////////////////////////////////////////////////////////////////////////////////////////////
 	if ( !hook_to_notification_point( HT_IDP, ( hook_cb_t* )callbacks::idp_callback ) ) {
@@ -201,7 +195,7 @@ static int idaapi hook_callbacks( ) {
 			msg( "[%s] %s -> hook_to_notification_point( HT_VIEW ) was successful\n", IDAP_name, __FUNCTION__ );
 		}
 	}
-	/*
+
 	// OUTPUT callback hook ////////////////////////////////////////////////////////////////////////////////////////////
 	if ( !hook_to_notification_point( HT_OUTPUT, ( hook_cb_t* )callbacks::output_callback ) ) {
 
@@ -217,21 +211,20 @@ static int idaapi hook_callbacks( ) {
 			msg( "[%s] %s -> hook_to_notification_point( HT_OUTPUT ) was successful\n", IDAP_name, __FUNCTION__ );
 		}
 	}
-	*/
 }
 
 static void idaapi unhook_callbacks( ) {
 
 	unhook_from_notification_point( HT_IDP,	   ( hook_cb_t* )callbacks::idp_callback    );
-	unhook_from_notification_point( HT_IDP,	   ( hook_cb_t* )callbacks::idb_callback    );
+	unhook_from_notification_point( HT_IDB,	   ( hook_cb_t* )callbacks::idb_callback    );
 	unhook_from_notification_point( HT_UI,	   ( hook_cb_t* )callbacks::ui_callback     );
-	unhook_from_notification_point( HT_UI,	   ( hook_cb_t* )callbacks::view_callback   );
+	unhook_from_notification_point( HT_VIEW,   ( hook_cb_t* )callbacks::view_callback   );
 	//unhook_from_notification_point( HT_OUTPUT, ( hook_cb_t* )callbacks::output_callback ); // unused
 }
 
 #pragma endregion 
-	
-static int idaapi IDAP_init( void ) {	
+
+static plugmod_t* idaapi IDAP_init( void ) {
 
 	addon_info_t addon;
 	addon.id       = "shigureJ.IDA.RPC";
